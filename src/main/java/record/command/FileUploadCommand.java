@@ -1,5 +1,7 @@
 package record.command;
 
+import record.service.impl.Constants;
+
 public class FileUploadCommand {
     private String fee;
     private Integer totalRecords;
@@ -18,5 +20,9 @@ public class FileUploadCommand {
 
     public void setTotalRecords(Integer totalRecords) {
         this.totalRecords = totalRecords;
+    }
+
+    public boolean hasFee() {
+        return fee.equalsIgnoreCase(Constants.YES);
     }
 }

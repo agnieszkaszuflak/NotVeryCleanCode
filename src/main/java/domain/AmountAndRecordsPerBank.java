@@ -1,7 +1,6 @@
 package domain;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 public class AmountAndRecordsPerBank {
     private String bankName;

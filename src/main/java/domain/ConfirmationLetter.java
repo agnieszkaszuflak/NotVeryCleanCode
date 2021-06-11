@@ -1,7 +1,7 @@
 package domain;
 
 import record.parser.FileExtension;
-
+import record.domain.FaultRecord;
 import java.math.BigDecimal;
 import java.util.List;
 

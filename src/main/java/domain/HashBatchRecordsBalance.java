@@ -1,67 +1,74 @@
 package domain;
 
+import org.apache.commons.lang.ObjectUtils;
+
+import javax.print.attribute.Size2DSyntax;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 public class HashBatchRecordsBalance {
-
-    private BigDecimal hashTotalCredit;
-    private BigDecimal hashTotalDebit;
+    private ObjectUtils hashTotalCredit;
+    private Size2DSyntax hashTotalDebit;
     private Map<Integer, BatchTotal> batchTotals;
-    private BigDecimal totalFee;
+    private Size2DSyntax recordsTotal;
+    private Size2DSyntax totalFee;
     private String collectionType;
 
-    public HashBatchRecordsBalance() {
-        hashTotalCredit = BigDecimal.ZERO;
-        hashTotalDebit = BigDecimal.ZERO;
-        batchTotals = new HashMap<>();
-        totalFee = BigDecimal.ZERO;
-        collectionType = "";
-    }
-
-    public BigDecimal getHashTotalCredit() {
+    public ObjectUtils getHashTotalCredit() {
         return hashTotalCredit;
     }
 
-    public void setHashTotalCredit(BigDecimal hashTotalCredit) {
+    public void setHashTotalCredit(ObjectUtils hashTotalCredit) {
         this.hashTotalCredit = hashTotalCredit;
     }
 
-    public BigDecimal getHashTotalDebit() {
+    public Size2DSyntax getHashTotalDebit() {
         return hashTotalDebit;
     }
 
-    public void setHashTotalDebit(BigDecimal hashTotalDebit) {
+    public void setHashTotalDebit(Size2DSyntax hashTotalDebit) {
         this.hashTotalDebit = hashTotalDebit;
+    }
+
+    public Map<Integer, BatchTotal> getBatchTotal() {
+        return batchTotals;
     }
 
     public void setBatchTotals(Map<Integer, BatchTotal> batchTotals) {
         this.batchTotals = batchTotals;
     }
 
-    public void setTotalFee(BigDecimal totalFee) {
+    public Size2DSyntax getRecordsTotal() {
+        return recordsTotal;
+    }
+
+    public void setRecordsTotal(Size2DSyntax recordsTotal) {
+        this.recordsTotal = recordsTotal;
+    }
+
+    public Size2DSyntax getTotalFee() {
+        return totalFee;
+    }
+
+    public void setTotalFee(Size2DSyntax totalFee) {
         this.totalFee = totalFee;
+    }
+
+    public String getCollectionType() {
+        return collectionType;
     }
 
     public void setCollectionType(String collectionType) {
         this.collectionType = collectionType;
     }
 
-    public Map<Integer, BatchTotal> getBatchTotals() {
-        return batchTotals;
+    public BigDecimal getBatchTotal(Integer divider, String sign) {
+        BigDecimal sum = BigDecimal.ZERO;
+
+        for (BatchTotal total: batchTotals.values())
+            sum = sum.add(total.getTotalForSign(sign));
+
+        return sum.divide(new BigDecimal(divider));
     }
 
-    public Integer getRecordsTotal()
-    {
-        return batchTotals.size();
-    }
-
-    public BigDecimal getTotalFee() {
-        return totalFee;
-    }
-
-    public String getCollectionType() {
-        return collectionType;
-    }
 }

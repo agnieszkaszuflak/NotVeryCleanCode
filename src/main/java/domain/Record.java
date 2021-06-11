@@ -1,24 +1,21 @@
 package domain;
 
-import java.math.BigDecimal;
-import java.nio.file.Path;
-import java.util.Collection;
+import record.service.impl.Constants;
 
-public class Record {
+import java.math.BigDecimal;
+
+public class Record implements GenericRecord {
     private Currency currency;
     private Integer feeRecord;
     private String sign;
     private BigDecimal amount;
+    private Integer isCounterTransferRecord;
     private String beneficiaryName;
     private Bank bank;
     private String beneficiaryAccountNumber;
 
     public Currency getCurrency() {
         return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     public Integer getFeeRecord() {
@@ -45,6 +42,14 @@ public class Record {
         this.amount = amount;
     }
 
+    public Integer getIsCounterTransferRecord() {
+        return isCounterTransferRecord;
+    }
+
+    public void setIsCounterTransferRecord(Integer isCounterTransferRecord) {
+        this.isCounterTransferRecord = isCounterTransferRecord;
+    }
+
     public String getBeneficiaryName() {
         return beneficiaryName;
     }
@@ -69,19 +74,52 @@ public class Record {
         this.beneficiaryAccountNumber = beneficiaryAccountNumber;
     }
 
-    public Comparable<Integer> getIsCounterTransferRecord() {
-        return null;
+    public boolean hasFlCurrency() {
+        return getCurrency().getCode().equals(
+                Constants.FL_CURRENCY_CODE) ||
+                getCurrency().getCode().equals(
+                        Constants.FL_CURRENCY_CODE_FOR_WEIRD_BANK);
     }
 
-    public class Bank {
-        private String name;
+    public boolean hasEurCurrency() {
+        return getCurrency().getCode().equals(
+                Constants.EUR_CURRENCY_CODE);
+    }
 
-        public String getName() {
-            return name;
-        }
+    public boolean isDebitRecord() {
+        return getSign().equalsIgnoreCase(
+                Constants.DEBIT);
+    }
 
-        public void setName(String name) {
-            this.name = name;
-        }
+    public boolean hasUsdCurrency() {
+        return getCurrency().getCode().equals(
+                Constants.USD_CURRENCY_CODE);
+    }
+
+    public boolean isCreditRecord() {
+        return getSign().equalsIgnoreCase(Constants.CREDIT);
+    }
+
+    public boolean isCounterTransferRecord() {
+        return getIsCounterTransferRecord() == 1;
+    }
+
+    public boolean hasFee() {
+        return getFeeRecord().compareTo(new Integer(0)) != 0;
+    }
+
+    @Override
+    public BigDecimal getAmountAsBigDecimal() {
+        return amount;
+    }
+
+    @Override
+    public String getCurrencyNumericCode() {
+        return getCurrency().getCode();
+    }
+
+    @Override
+    public void setCurrencyNumericCode(String code) {
+        getCurrency().setCode(code);
     }
 }
